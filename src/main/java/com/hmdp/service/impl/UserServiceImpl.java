@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
 import java.util.HashMap;
@@ -37,7 +38,7 @@ import static com.hmdp.utils.SystemConstants.USER_NICK_NAME_PREFIX;
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
 
-    @Autowired
+    @Resource
     private StringRedisTemplate stringRedisTemplate;
 
     @Override
@@ -51,7 +52,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         String verifyCode = RandomUtil.randomNumbers(6);
 
         // 保存验证码到session
-//        session.setAttribute("session_verifyCode", verifyCode);
+        session.setAttribute("session_verifyCode", verifyCode);
         // 保存验证码到redis
         stringRedisTemplate.opsForValue().set(LOGIN_CODE_KEY + phone, verifyCode);
         stringRedisTemplate.expire(LOGIN_CODE_KEY + phone, LOGIN_CODE_TTL, TimeUnit.MINUTES);
@@ -75,6 +76,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         if (!loginForm.getCode().equals(stringRedisTemplate.opsForValue().get(LOGIN_CODE_KEY + phone))) {
             return Result.fail("验证码错误");
         }
+//        String code = (String) session.getAttribute("session_verifyCode");
+//        if(!loginForm.getCode().equals(code)) {
+//            return Result.fail("验证码错误");
+//        }
 
         // 查询用户
         User user = query().eq("phone", phone).one();

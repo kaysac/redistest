@@ -43,7 +43,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Override
     public Result sendVerify(String phone, HttpSession session) {
         // 验证手机号
-        if (!RegexUtils.isPhoneInvalid(phone)) {
+        if (RegexUtils.isPhoneInvalid(phone)) {
             return Result.fail("手机格式无效");
         }
 
@@ -67,7 +67,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
         String phone = loginForm.getPhone();
         // 验证手机号
-        if (!RegexUtils.isPhoneInvalid(phone)) {
+        if (RegexUtils.isPhoneInvalid(phone)) {
             return Result.fail("手机格式无效");
         }
 

@@ -60,9 +60,9 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements IS
         return Result.ok(shop);
 */
 
-//        Shop shop = queryWithPassThrough(id);
+        Shop shop = queryWithPassThrough(id);
 //        Shop shop = queryWithMutex(id);
-        Shop shop = queryWithExpioreTime(id);
+//        Shop shop = queryWithExpioreTime(id);
         if (shop == null) {
             return Result.fail("商铺信息不存在");
         }
